@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Police Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Police Dashboard</h1>
+      <a href="index.html" class="btn">Back to Home</a>
+    </header>
+    <section>
+      <h2>File a New Case</h2>
+      <form id="new-case-form">
+        <input type="text" id="case-title" placeholder="Case Title" required>
+        <textarea id="case-description" placeholder="Case Description" required></textarea>
+        <input type="text" id="case-location" placeholder="Location" required>
+        <select id="case-type" required>
+          <option value="">Select Case Type</option>
+          <option value="Crime">Crime</option>
+          <option value="Suspicious Activity">Suspicious Activity</option>
+        </select>
+        <button type="submit" class="btn">Submit Case</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Cases</h2>
+      <ul id="cases-list"></ul>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
