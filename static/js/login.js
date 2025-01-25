@@ -22,12 +22,12 @@ roleForm.addEventListener("submit", (e) => {
 document.getElementById("police-form").addEventListener("submit", (e) => {
   e.preventDefault();
   alert("Police Login Successful!");
-  window.location.href = "police-dashboard.html";
+  window.location.href = "police-dashboard";
 });
 
 // Handle Citizen Login
 document.getElementById("citizen-form").addEventListener("submit", (e) => {
   e.preventDefault();
   alert("Citizen Login Successful!");
-  window.location.href = "user-dashboard.html";
+  window.location.href = "user-dashboard";
 });
