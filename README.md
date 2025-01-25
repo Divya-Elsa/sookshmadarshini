@@ -29,6 +29,7 @@ The Community Safety Reporting Platform provides a secure, anonymous, and user-f
 ## Technical Details
 ### Technologies/Components Used
 For Software:
+
 - Python
 - REACT
 - [Libraries used]
