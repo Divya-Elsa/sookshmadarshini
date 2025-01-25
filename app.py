@@ -1,58 +1,83 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask_cors import CORS # type: ignore
+from flask_sqlalchemy import SQLAlchemy # type: ignore
+import uuid
 
 app = Flask(__name__)
 
-# In-memory storage for demo purposes
-cases = []
-reports = []
+# Enable CORS to allow cross-origin requests
+CORS(app)
 
-# Routes for HTML pages
-@app.route('/')
+# Configure the database (SQLite for simplicity)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cases.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# Case model for the database
+class Case(db.Model):
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
+    title = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return f'<Case {self.title}>'
+
+# Create the database
+with app.app_context():
+    db.create_all()
+
+@app.route("/")
 def home():
-    return render_template('login.html')
+    return render_template("login.html")
 
-@app.route('/police-dashboard')
+@app.route("/lginwithgps")
+def login_with_gps():
+    return render_template("lginwithgps.html")
+
+@app.route("/police-dashboard")
 def police_dashboard():
-    return render_template('police_dashboard.html')
+    return render_template("police-dashboard.html")
 
-@app.route('/user-dashboard')
+@app.route("/user-dashboard")
 def user_dashboard():
-    return render_template('user_dashboard.html')
+    return render_template("user-dashboard.html")
 
-# API for handling case submissions (Police)
-@app.route('/api/file_case', methods=['POST'])
-def file_case():
-    data = request.json
-    case = {
-        "title": data['title'],
-        "location": data['location'],
-        "date": data['date'],
-        "type": data['type']
-    }
-    cases.append(case)
-    return jsonify({"message": "Case filed successfully", "case": case}), 201
+@app.route("/cases", methods=["GET", "POST"])
+def handle_cases():
+    if request.method == "POST":
+        # Add a new case
+        title = request.json.get("title")
+        location = request.json.get("location")
 
-# API for fetching all cases
-@app.route('/api/cases', methods=['GET'])
-def get_cases():
-    return jsonify(cases), 200
+        if not title or not location:
+            return jsonify({"message": "Invalid input"}), 400
 
-# API for user reports
-@app.route('/api/submit_report', methods=['POST'])
-def submit_report():
-    data = request.json
-    report = {
-        "case_id": data['case_id'],
-        "content": data['content']
-    }
-    reports.append(report)
-    return jsonify({"message": "Report submitted successfully", "report": report}), 201
+        new_case = Case(title=title, location=location)
+        db.session.add(new_case)
+        db.session.commit()
 
-# API for fetching reports
-@app.route('/api/reports', methods=['GET'])
-def get_reports():
-    return jsonify(reports), 200
+        return jsonify({"message": "Case added successfully!", "case": {
+            "id": new_case.id,
+            "title": new_case.title,
+            "location": new_case.location
+        }}), 201
 
-# Run the Flask app
-if __name__ == '__main__':
+    # Get all cases
+    cases = Case.query.all()
+    case_list = [{"id": case.id, "title": case.title, "location": case.location} for case in cases]
+    return jsonify(case_list)
+
+@app.route("/reports", methods=["POST"])
+def handle_reports():
+    case_id = request.json.get("case_id")
+    content = request.json.get("content")
+
+    if not case_id or not content:
+        return jsonify({"message": "Invalid input"}), 400
+
+    # Log the report (replace with DB or further processing in production)
+    print(f"New report submitted for case {case_id}: {content}")
+    return jsonify({"message": "Report submitted successfully!"}), 201
+
+if __name__ == "__main__":
     app.run(debug=True)
