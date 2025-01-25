@@ -1,3 +1,2 @@
-# sookshmadarshini
+# Sookshmadarshini
 The proposed Community Safety Reporting Platform is a user-friendly, digital solution aimed at empowering housewives and other community members to contribute to neighborhood safety and security. The platform enables anonymous reporting of suspicious activities and safety concerns through intuitive submission forms, complete with options for uploading photos. User-generated reports will be utilized to create interactive crime heatmaps, providing a visual representation of safety trends in specific areas. Additionally, the platform will offer real-time alerts for local safety updates, fostering informed decision-making and vigilance among residents. By bridging the gap between communities and local law enforcement, this platform seeks to enhance collaborative efforts, improve situational awareness, and create safer living environments.
-
