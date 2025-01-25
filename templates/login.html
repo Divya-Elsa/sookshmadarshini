@@ -1,0 +1,44 @@
+<div id="app">
+  <h1>Welcome to Sookshmadarshini</h1>
+  <h2>Login</h2>
+  <form id="login-form">
+    <label for="user-type">Select User Type:</label>
+    <select id="user-type" name="user-type" required>
+      <option value="">-- Select --</option>
+      <option value="police">Police</option>
+      <option value="citizen">Citizen</option>
+    </select>
+
+    <!-- Common Login Fields -->
+    <div id="common-fields">
+      <label for="username">Name:</label>
+      <input type="text" id="username" name="username" placeholder="Enter your name" required>
+
+      <label for="location">Location:</label>
+      <input type="text" id="location" name="location" placeholder="Enter or fetch your location" required>
+      <button type="button" id="get-location">Get Current Location</button>
+    </div>
+
+    <!-- Police-Specific Fields -->
+    <div id="police-fields" class="hidden">
+      <label for="police-id">Police ID:</label>
+      <input type="text" id="police-id" name="police-id" placeholder="Enter your Police ID">
+      
+      <label for="station-name">Police Station:</label>
+      <input type="text" id="station-name" name="station-name" placeholder="Enter your station name">
+    </div>
+
+    <!-- Citizen-Specific Fields -->
+    <div id="citizen-fields" class="hidden">
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+      
+      <label for="residential-details">Residential Details:</label>
+      <textarea id="residential-details" name="residential-details" placeholder="Enter your residential details" required></textarea>
+    </div>
+
+    <button type="submit">Login</button>
+  </form>
+
+  <p id="location-error" style="color: red; display: none;">Unable to retrieve location. Please enter it manually.</p>
+</div>
