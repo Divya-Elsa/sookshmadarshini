@@ -9,12 +9,16 @@ app = Flask(__name__)
 CORS(app)
 
 # MongoDB Atlas connection string (Replace <username>, <password>, and <database> with actual values)
-MONGO_URI = "mongodb+srv://hrdyaah:12345@cluster0.1dzri.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+MONGO_URI = "mongodb+srv://hrdyaah:12345@cluster0.1dzri.mongodb.net/sookshmadarshini?retryWrites=true&w=majority&appName=Cluster0"
 
 # Connect to MongoDB
-client = MongoClient(MONGO_URI)
-db = client['<database>']  # Replace with your database name
-cases_collection = db['cases']  # MongoDB collection for storing cases
+try:
+    client = MongoClient(MONGO_URI)
+    db = client['sookshmadarshini']  # Replace with your actual database name
+    cases_collection = db['cases']  # MongoDB collection for storing cases
+    print("🚀 Successfully connected to MongoDB!")
+except Exception as e:
+    print(f"❌ Error connecting to MongoDB: {e}")
 
 @app.route("/")
 def home():
@@ -32,8 +36,9 @@ def police_dashboard():
 def user_dashboard():
     return render_template("user-dashboard.html")
 
-@app.route("/cases", methods=["GET", "POST"])
+@app.route("/police", methods=["GET", "POST"])
 def handle_cases():
+    print("Hello world")
     if request.method == "POST":
         # Add a new case to MongoDB
         title = request.json.get("title")
@@ -42,8 +47,7 @@ def handle_cases():
         if not title or not location:
             return jsonify({"message": "Invalid input"}), 400
 
-        new_case = {
-            "_id": str(uuid.uuid4()),  # Generate unique ID for MongoDB
+        new_case = { # Generate unique ID for MongoDB
             "title": title,
             "location": location
         }
@@ -52,10 +56,7 @@ def handle_cases():
 
         return jsonify({"message": "Case added successfully!", "case": new_case}), 201
 
-    # Get all cases from MongoDB
-    cases = list(cases_collection.find({}, {"_id": 0}))  # Exclude MongoDB default _id field from response
-    return jsonify(cases)
-
+    
 @app.route("/reports", methods=["POST"])
 def handle_reports():
     case_id = request.json.get("case_id")
@@ -74,4 +75,5 @@ def handle_reports():
     return jsonify({"message": "Report submitted successfully!"}), 201
 
 if __name__ == "__main__":
+    print("🚀 Flask server is running at http://127.0.0.1:5000/")
     app.run(debug=True)

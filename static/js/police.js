@@ -18,15 +18,31 @@ function renderCases() {
   });
 }
 
-caseForm.addEventListener("submit", (e) => {
+// caseForm.addEventListener("submit", (e) => {
+//   e.preventDefault();
+//   const newCase = {
+//     title: document.getElementById("case-title").value,
+//     location: document.getElementById("case-location").value,
+//     date: document.getElementById("case-date").value,
+//     type: document.getElementById("case-type").value,
+//   };
+//   cases.push(newCase);
+//   renderCases();
+//   caseForm.reset();
+// });
+
+document.getElementById('case-form').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const newCase = {
-    title: document.getElementById("case-title").value,
-    location: document.getElementById("case-location").value,
-    date: document.getElementById("case-date").value,
-    type: document.getElementById("case-type").value,
-  };
-  cases.push(newCase);
-  renderCases();
-  caseForm.reset();
+  const title = document.getElementById('case-title').value;
+  const location = document.getElementById('case-location').value;
+  
+  const response = await fetch('/police', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, location })
+  });
+
+  const result = await response.json();
+  alert(result.message);
+  location.reload();
 });
