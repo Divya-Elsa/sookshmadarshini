@@ -1,58 +1,79 @@
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS  # Import CORS for cross-origin requests
+from pymongo import MongoClient  # Import MongoDB client
+import uuid
 
 app = Flask(__name__)
 
-# In-memory storage for demo purposes
-cases = []
-reports = []
+# Enable CORS for the app
+CORS(app)
 
-# Routes for HTML pages
-@app.route('/')
+# MongoDB Atlas connection string (Replace <username>, <password>, and <database> with actual values)
+MONGO_URI = "mongodb+srv://hrdyaah:12345@cluster0.1dzri.mongodb.net/sookshmadarshini?retryWrites=true&w=majority&appName=Cluster0"
+
+# Connect to MongoDB
+try:
+    client = MongoClient(MONGO_URI)
+    db = client['sookshmadarshini']  # Replace with your actual database name
+    cases_collection = db['cases']  # MongoDB collection for storing cases
+    print("🚀 Successfully connected to MongoDB!")
+except Exception as e:
+    print(f"❌ Error connecting to MongoDB: {e}")
+
+@app.route("/")
 def home():
-    return render_template('login.html')
+    return render_template("login.html")
 
-@app.route('/police-dashboard')
+@app.route("/lginwithgps")
+def login_with_gps():
+    return render_template("lginwithgps.html")
+
+@app.route("/police-dashboard")
 def police_dashboard():
-    return render_template('police_dashboard.html')
+    return render_template("police-dashboard.html")
 
-@app.route('/user-dashboard')
+@app.route("/user-dashboard")
 def user_dashboard():
-    return render_template('user_dashboard.html')
+    return render_template("user-dashboard.html")
 
-# API for handling case submissions (Police)
-@app.route('/api/file_case', methods=['POST'])
-def file_case():
-    data = request.json
-    case = {
-        "title": data['title'],
-        "location": data['location'],
-        "date": data['date'],
-        "type": data['type']
-    }
-    cases.append(case)
-    return jsonify({"message": "Case filed successfully", "case": case}), 201
+@app.route("/police", methods=["GET", "POST"])
+def handle_cases():
+    print("Hello world")
+    if request.method == "POST":
+        # Add a new case to MongoDB
+        title = request.json.get("title")
+        location = request.json.get("location")
 
-# API for fetching all cases
-@app.route('/api/cases', methods=['GET'])
-def get_cases():
-    return jsonify(cases), 200
+        if not title or not location:
+            return jsonify({"message": "Invalid input"}), 400
 
-# API for user reports
-@app.route('/api/submit_report', methods=['POST'])
-def submit_report():
-    data = request.json
+        new_case = { # Generate unique ID for MongoDB
+            "title": title,
+            "location": location
+        }
+
+        cases_collection.insert_one(new_case)  # Insert into MongoDB
+
+        return jsonify({"message": "Case added successfully!", "case": new_case}), 201
+
+    
+@app.route("/reports", methods=["POST"])
+def handle_reports():
+    case_id = request.json.get("case_id")
+    content = request.json.get("content")
+
+    if not case_id or not content:
+        return jsonify({"message": "Invalid input"}), 400
+
+    # Store report into MongoDB (you can create a new 'reports' collection if needed)
     report = {
-        "case_id": data['case_id'],
-        "content": data['content']
+        "case_id": case_id,
+        "content": content
     }
-    reports.append(report)
-    return jsonify({"message": "Report submitted successfully", "report": report}), 201
+    db.reports.insert_one(report)  # Insert report into MongoDB collection
 
-# API for fetching reports
-@app.route('/api/reports', methods=['GET'])
-def get_reports():
-    return jsonify(reports), 200
+    return jsonify({"message": "Report submitted successfully!"}), 201
 
-# Run the Flask app
-if __name__ == '__main__':
+if __name__ == "__main__":
+    print("🚀 Flask server is running at http://127.0.0.1:5000/")
     app.run(debug=True)
