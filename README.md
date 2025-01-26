@@ -43,22 +43,26 @@ For Hardware:
 ### Implementation
 For Software:
 # Installation
-[commands]
+VSCODE
+FLASK
+FIGMA 
+MONGO DB
+PYTHON
 
 # Run
-[commands]
+python app.py
 
 ### Project Documentation
 For Software:
 
 # Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
+[screenshot 1](https://drive.google.com/file/d/1c_i7La1bSjkilwptSnMUFQ62gk8fkl3D/view?usp=drive_link)[Screenshot1](Add screenshot 1 here with proper name)
 *Add caption explaining what this shows*
 
-![Screenshot2](Add screenshot 2 here with proper name)
+[(screenshot 2](https://drive.google.com/file/d/1D19i1lNMsg-erxHcetVL-E7OiHP29oGI/view?usp=drive_link))(Add screenshot 2 here with proper name)
 *Add caption explaining what this shows*
 
-![Screenshot3](Add screenshot 3 here with proper name)
+[![Screenshot3]](https://drive.google.com/file/d/1JhJ56N9MIK9m9fLgwnVBNzxV8FGHEezg/view?usp=drive_link)(Add screenshot 3 here with proper name)
 *Add caption explaining what this shows*
 
 # Diagrams
@@ -89,7 +93,7 @@ For Hardware:
 
 ### Project Demo
 # Video
-[Add your demo video link here]
+(https://drive.google.com/file/d/1Ld2bYjd8SexjwyZKJmkbGR5Dy7zYf1qw/view?usp=drive_link)
 *Explain what the video demonstrates*
 
 # Additional Demos
