@@ -16,9 +16,11 @@ try:
     client = MongoClient(MONGO_URI)
     db = client['sookshmadarshini']  # Replace with your actual database name
     cases_collection = db['cases']  # MongoDB collection for storing cases
-    print("🚀 Successfully connected to MongoDB!")
+    users_collection = db['users']  # MongoDB collection for storing user details
+    reports_collection = db['reports']  # MongoDB collection for storing user reports
+    print("\ud83d\ude80 Successfully connected to MongoDB!")
 except Exception as e:
-    print(f"❌ Error connecting to MongoDB: {e}")
+    print(f"\u274c Error connecting to MongoDB: {e}")
 
 @app.route("/")
 def home():
@@ -30,33 +32,42 @@ def login_with_gps():
 
 @app.route("/police-dashboard")
 def police_dashboard():
-    return render_template("police-dashboard.html")
+    cases = list(cases_collection.find({}, {"_id": 0}))
+    reports = list(reports_collection.find({}, {"_id": 0}))
+    return render_template("police-dashboard.html", cases=cases, reports=reports)
 
 @app.route("/user-dashboard")
 def user_dashboard():
-    return render_template("user-dashboard.html")
+    cases = list(cases_collection.find({}, {"_id": 0}))
+    return render_template("user-dashboard.html", cases=cases)
 
 @app.route("/police", methods=["GET", "POST"])
 def handle_cases():
-    print("Hello world")
     if request.method == "POST":
         # Add a new case to MongoDB
-        title = request.json.get("title")
-        location = request.json.get("location")
+        data = request.json
+        title = data.get("title")
+        location = data.get("location")
+        date = data.get("date")
+        case_type = data.get("case_type")
 
-        if not title or not location:
+        if not title or not location or not date or not case_type:
             return jsonify({"message": "Invalid input"}), 400
 
-        new_case = { # Generate unique ID for MongoDB
+        new_case = {
             "title": title,
-            "location": location
+            "location": location,
+            "date": date,
+            "case_type": case_type
         }
 
         cases_collection.insert_one(new_case)  # Insert into MongoDB
-
         return jsonify({"message": "Case added successfully!", "case": new_case}), 201
+    else:
+        cases = list(cases_collection.find({}, {"_id": 0}))
+        print(cases)
+        return jsonify(cases)
 
-    
 @app.route("/reports", methods=["POST"])
 def handle_reports():
     case_id = request.json.get("case_id")
@@ -65,15 +76,29 @@ def handle_reports():
     if not case_id or not content:
         return jsonify({"message": "Invalid input"}), 400
 
-    # Store report into MongoDB (you can create a new 'reports' collection if needed)
     report = {
         "case_id": case_id,
         "content": content
     }
-    db.reports.insert_one(report)  # Insert report into MongoDB collection
+    reports_collection.insert_one(report)  # Insert report into MongoDB collection
 
     return jsonify({"message": "Report submitted successfully!"}), 201
 
+@app.route("/login", methods=["POST"])
+def login():
+    user_data = request.json
+    user_type = user_data.get("user_type")
+    username = user_data.get("username")
+    location = user_data.get("location")
+
+    if not user_type or not username or not location:
+        return jsonify({"message": "Invalid input"}), 400
+
+    user_data["id"] = str(uuid.uuid4())
+    users_collection.insert_one(user_data)
+
+    return jsonify({"message": "Login successful!", "user": user_data}), 200
+
 if __name__ == "__main__":
-    print("🚀 Flask server is running at http://127.0.0.1:5000/")
+    print("Flask server is running at http://127.0.0.1:5000/")
     app.run(debug=True)

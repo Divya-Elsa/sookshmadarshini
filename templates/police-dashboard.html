@@ -4,14 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Police Dashboard</title>
-
-
-  <link rel="stylesheet" href="static\css\styles.css">
-
+  <link rel="stylesheet" href="static/css/styles.css">
 </head>
 <body>
   <div id="app">
     <h1>Police Dashboard</h1>
+
     <section id="case-list">
       <h2>Filed Cases</h2>
       <ul id="cases"></ul>
@@ -19,7 +17,7 @@
 
     <section id="file-case">
       <h2>File a New Case</h2>
-      <form id="case-form"  method="POST" action="/police">
+      <form id="case-form">
         <input type="text" id="case-title" placeholder="Case Title" required>
         <input type="text" id="case-location" placeholder="Case Location" required>
         <input type="date" id="case-date" required>
@@ -34,8 +32,78 @@
     </section>
   </div>
 
+  <script>
+    async function fetchCases() {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/police', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
 
-  <script src="static\js\police.js"></script>
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
+        const data = await response.json();
+        console.log('Cases:', data);
+        
+        // Display cases in the list
+        const caseList = document.getElementById("cases");
+        caseList.innerHTML = data.map(c => 
+          `<li><strong>${c.title}</strong> - ${c.location} (${c.date}, ${c.case_type})</li>`
+        ).join("");
+        
+      } catch (error) {
+        console.error('Error fetching cases:', error);
+      }
+    }
+
+    async function submitCase(event) {
+      event.preventDefault();
+
+      const title = document.getElementById('case-title').value;
+      const location = document.getElementById('case-location').value;
+      const date = document.getElementById('case-date').value;
+      const caseType = document.getElementById('case-type').value;
+
+      if (!title || !location || !date || !caseType) {
+        alert('Please fill all fields');
+        return;
+      }
+
+      const caseData = {
+        title: title,
+        location: location,
+        date: date,
+        case_type: caseType
+      };
+
+      try {
+        const response = await fetch('http://127.0.0.1:5000/police', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(caseData)
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          alert(result.message);
+          fetchCases();  // Refresh the cases list after adding
+          document.getElementById('case-form').reset();
+        } else {
+          alert('Error: ' + result.message);
+        }
+      } catch (error) {
+        console.error('Error submitting case:', error);
+      }
+    }
+
+    document.getElementById('case-form').addEventListener('submit', submitCase);
+    window.onload = fetchCases;
+  </script>
 </body>
 </html>
