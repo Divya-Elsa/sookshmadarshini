@@ -3,8 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Sookshmadarshini</title>
-  <link rel="stylesheet" href="static/css/styles.css">
+  <title>Welcome to Sookshmadarshini</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url("static\image\Sookshmadarshini-2025-01-4bcf1334f63f9cee40982f1a2cfe28af-3x2.webp") no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      backdrop-filter: blur(5px);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    p {
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #f9f9f9;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    select, button {
+      width: 300px;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    select {
+      background: white;
+      color: black;
+    }
+
+    button {
+      background-color: #b30000;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #800000;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #police-login, #citizen-login {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      margin-top: 2rem;
+    }
+
+    input {
+      width: 300px;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      outline: none;
+      border: 2px solid #b30000;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
@@ -45,6 +137,38 @@
     </section>
   </div>
 
-  <script src="static/js/login.js"></script>
+  <script>
+    const roleForm = document.getElementById('role-form');
+    const policeLogin = document.getElementById('police-login');
+    const citizenLogin = document.getElementById('citizen-login');
+    const loginPage = document.getElementById('login-page');
+
+    roleForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const selectedRole = document.getElementById('role-select').value;
+
+      if (selectedRole === 'police') {
+        loginPage.classList.add('hidden');
+        policeLogin.classList.remove('hidden');
+      } else if (selectedRole === 'citizen') {
+        loginPage.classList.add('hidden');
+        citizenLogin.classList.remove('hidden');
+      } else {
+        alert('Please select a valid role.');
+      }
+    });
+
+    document.getElementById('police-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Police Login Successful!');
+      window.location.href = '/police-dashboard';
+    });
+
+    document.getElementById('citizen-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Citizen Login Successful!');
+      window.location.href = '/user-dashboard';
+    });
+  </script>
 </body>
 </html>

@@ -32,8 +32,8 @@ For Software:
 
 - Python
 - REACT
-- [Libraries used]
-- [Tools used]
+- Flask
+- MongoDB
 
 For Hardware:
 - [List main components]
@@ -96,9 +96,9 @@ For Hardware:
 [Add any extra demo materials/links]
 
 ## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
+- Hridya B: [Specific contributions]
+- Divya Thomas: [Specific contributions]
+- Nandana Anil: [Specific contributions]
 
 ---
 Made with ❤️ at TinkerHub
