@@ -1,45 +1,174 @@
-<div id="app">
-    <h1>Welcome to Sookshmadarshini</h1>
-    <h2>Login</h2>
-    <form id="login-form">
-      <label for="user-type">Select User Type:</label>
-      <select id="user-type" name="user-type" required>
-        <option value="">-- Select --</option>
-        <option value="police">Police</option>
-        <option value="citizen">Citizen</option>
-      </select>
-  
-      <!-- Common Login Fields -->
-      <div id="common-fields">
-        <label for="username">Name:</label>
-        <input type="text" id="username" name="username" placeholder="Enter your name" required>
-  
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" placeholder="Enter or fetch your location" required>
-        <button type="button" id="get-location">Get Current Location</button>
-      </div>
-  
-      <!-- Police-Specific Fields -->
-      <div id="police-fields" class="hidden">
-        <label for="police-id">Police ID:</label>
-        <input type="text" id="police-id" name="police-id" placeholder="Enter your Police ID">
-        
-        <label for="station-name">Police Station:</label>
-        <input type="text" id="station-name" name="station-name" placeholder="Enter your station name">
-      </div>
-  
-      <!-- Citizen-Specific Fields -->
-      <div id="citizen-fields" class="hidden">
-        <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
-        
-        <label for="residential-details">Residential Details:</label>
-        <textarea id="residential-details" name="residential-details" placeholder="Enter your residential details" required></textarea>
-      </div>
-  
-      <button type="submit">Login</button>
-    </form>
-  
-    <p id="location-error" style="color: red; display: none;">Unable to retrieve location. Please enter it manually.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Sookshmadarshini</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url("C:\Users\divya_jwvaabm\Downloads\Untitled.png") no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      backdrop-filter: blur(5px);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    p {
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #f9f9f9;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    select, button {
+      width: 300px;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    select {
+      background: white;
+      color: black;
+    }
+
+    button {
+      background-color: #b30000;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #800000;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #police-login, #citizen-login {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      margin-top: 2rem;
+    }
+
+    input {
+      width: 300px;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      outline: none;
+      border: 2px solid #b30000;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <section id="login-page">
+      <h1>Welcome to Sookshmadarshini</h1>
+      <p>Select your role and log in to continue:</p>
+      <form id="role-form">
+        <label for="role-select">Select Role:</label>
+        <select id="role-select" required>
+          <option value="">Choose...</option>
+          <option value="police">Police</option>
+          <option value="citizen">Citizen</option>
+        </select>
+        <button type="submit">Next</button>
+      </form>
+    </section>
+
+    <section id="police-login" class="hidden">
+      <h2>Police Login</h2>
+      <form id="police-form">
+        <input type="text" id="police-name" placeholder="Police Name" required>
+        <input type="text" id="police-id" placeholder="Police ID" required>
+        <input type="text" id="police-station" placeholder="Station Name" required>
+        <input type="text" id="police-location" placeholder="Location" required>
+        <button type="submit">Login</button>
+      </form>
+    </section>
+
+    <section id="citizen-login" class="hidden">
+      <h2>Citizen Login</h2>
+      <form id="citizen-form">
+        <input type="text" id="citizen-name" placeholder="Full Name" required>
+        <input type="text" id="citizen-phone" placeholder="Phone Number" required>
+        <input type="text" id="citizen-address" placeholder="Residential Address" required>
+        <input type="text" id="citizen-id" placeholder="ID Proof (e.g., Aadhaar)" required>
+        <button type="submit">Login</button>
+      </form>
+    </section>
   </div>
-  
+
+  <script>
+    const roleForm = document.getElementById('role-form');
+    const policeLogin = document.getElementById('police-login');
+    const citizenLogin = document.getElementById('citizen-login');
+    const loginPage = document.getElementById('login-page');
+
+    roleForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const selectedRole = document.getElementById('role-select').value;
+
+      if (selectedRole === 'police') {
+        loginPage.classList.add('hidden');
+        policeLogin.classList.remove('hidden');
+      } else if (selectedRole === 'citizen') {
+        loginPage.classList.add('hidden');
+        citizenLogin.classList.remove('hidden');
+      } else {
+        alert('Please select a valid role.');
+      }
+    });
+
+    document.getElementById('police-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Police Login Successful!');
+      window.location.href = '/police-dashboard';
+    });
+
+    document.getElementById('citizen-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Citizen Login Successful!');
+      window.location.href = '/user-dashboard';
+    });
+  </script>
+</body>
+</html>
