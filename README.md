@@ -100,9 +100,9 @@ For Hardware:
 [Add any extra demo materials/links]
 
 ## Team Contributions
-- Hridya B: [Specific contributions]
-- Divya Thomas: [Specific contributions]
-- Nandana Anil: [Specific contributions]
+- Hridya B: Database
+- Divya Thomas: Backend
+- Nandana Anil: Frontend
 
 ---
 Made with ❤️ at TinkerHub
